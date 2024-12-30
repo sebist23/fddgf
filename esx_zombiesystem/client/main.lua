@@ -13,6 +13,21 @@ function IsVehicleWeapon(entity)
         end
     end
     return false
+ESX = exports['es_extended']:getSharedObject() 
+
+function IsVehicleWeapon(entity)
+    -- Assuming you have a list of known vehicle weapons, you can check against it
+    local vehicleWeapons = {
+        -- Add known vehicle weapon hashes or identifiers here
+    }
+
+    local entityModel = GetEntityModel(entity)
+    for _, weapon in ipairs(vehicleWeapons) do
+        if entityModel == GetHashKey(weapon) then
+            return true
+        end
+    end
+    return false
 end
 
 RegisterNetEvent('esx:playerLoaded')
@@ -503,10 +518,11 @@ if Config.ZombieDropLoot then
 			for i, entity in pairs(entitys) do
 if IsPedDeadOrDying(entity, 1) == 1 then
     local sourceOfDeath = GetPedSourceOfDeath(entity)
-if sourceOfDeath == PlayerPedId() then
-    local randomChance = math.random(1, 100)
-    local randomWeapon = Config.WeaponLoot[math.random(1, #Config.WeaponLoot)]
-    local randomItem = Config.ItemLoot[math.random(1, #Config.ItemLoot)]
+if sourceOfDeath == PlayerPedId() or IsEntityAVehicle(sourceOfDeath) then
+    if not IsEntityAVehicle(sourceOfDeath) then
+        local randomChance = math.random(1, 100)
+        local randomWeapon = Config.WeaponLoot[math.random(1, #Config.WeaponLoot)]
+        local randomItem = Config.ItemLoot[math.random(1, #Config.ItemLoot)]
 
 						if randomChance > 0 and randomChance < Config.ProbabilityWeaponLoot then
 							local randomAmmo = math.random(1, 30)
