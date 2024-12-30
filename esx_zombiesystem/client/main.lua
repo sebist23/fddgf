@@ -1,5 +1,20 @@
 ESX = exports['es_extended']:getSharedObject() 
 
+function IsVehicleWeapon(entity)
+    -- Assuming you have a list of known vehicle weapons, you can check against it
+    local vehicleWeapons = {
+        -- Add known vehicle weapon hashes or identifiers here
+    }
+
+    local entityModel = GetEntityModel(entity)
+    for _, weapon in ipairs(vehicleWeapons) do
+        if entityModel == GetHashKey(weapon) then
+            return true
+        end
+    end
+    return false
+end
+
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
 	PlayerData = xPlayer
