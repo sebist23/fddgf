@@ -28,7 +28,26 @@ function IsVehicleWeapon(entity)
         end
     end
     return false
+ESX = exports['es_extended']:getSharedObject() 
+
+-- Add a function to check if the source of damage is a vehicle
+function IsVehicle(entity)
+    return IsEntityAVehicle(entity)
 end
+
+-- Add an event handler for the entity damage event
+AddEventHandler('gameEventTriggered', function(eventName, eventData)
+    if eventName == 'CEventNetworkEntityDamage' then
+        local victim = eventData[1]
+        local attacker = eventData[2]
+
+        -- Check if the victim is a zombie and the attacker is a vehicle
+        if IsPedAPlayer(victim) == false and IsVehicle(attacker) then
+            -- Cancel the damage event
+            CancelEvent()
+        end
+    end
+end)
 
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
